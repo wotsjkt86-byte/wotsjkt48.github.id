@@ -1,221 +1,144 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Wotsnite48 Live</title>
-  <style>
-    body { margin:0; font-family:Arial; background:#000; color:#fff; }
-    header { padding:15px 20px; display:flex; justify-content:space-between; background:#111; }
-    nav a { color:#ccc; margin-left:15px; text-decoration:none; }
-    nav a:hover { color:#fff; }
-    section { max-width:900px; margin:auto; padding:30px 20px; }
-    iframe { width:100%; aspect-ratio:16/9; border-radius:14px; border:none; }
-    .btn { padding:10px 20px; border:none; border-radius:20px; cursor:pointer; background:red; color:#fff; }
-    .box { background:#111; padding:20px; border-radius:14px; margin-bottom:20px; }
-    input { width:100%; padding:10px; margin:8px 0; border-radius:10px; border:none; }
-    footer { text-align:center; color:#777; padding:20px; }
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Wotsnite48 Live</title>
+<style>
+body{margin:0;font-family:Arial;background:#000;color:#fff}
+header{padding:15px 20px;display:flex;justify-content:space-between;align-items:center;background:#111}
+header b{font-size:18px}
+section{max-width:900px;margin:auto;padding:30px 20px}
+.box{background:#111;padding:20px;border-radius:14px;margin-bottom:20px}
+input{width:100%;padding:10px;margin:8px 0;border-radius:10px;border:none}
+.btn{padding:10px 20px;border:none;border-radius:20px;cursor:pointer;background:red;color:#fff;width:100%}
+iframe{width:100%;aspect-ratio:16/9;border-radius:14px;border:none}
+.logout{background:#444;border:none;color:#fff;padding:8px 14px;border-radius:20px}
+.wa{display:block;margin-top:15px;text-align:center;background:#25D366;padding:12px;border-radius:20px;color:#fff;text-decoration:none}
+</style>
 </head>
 <body>
 
 <header>
-  <div style="display:flex;align-items:center;gap:10px;">
-    <img id="siteLogo" src="" alt="Logo" style="height:40px;border-radius:8px;display:none;" />
-    <b>Wotsnite48 Live</b>
-  </div>
-  <nav>
-    <a href="#login">Login</a>
-  </nav>
+  <b>Wotsnite48 Live</b>
+  <button id="logoutBtn" class="logout" onclick="logoutUser()" style="display:none">Logout</button>
 </header>
 
-<!-- LOGIN / REGISTER (HALAMAN AWAL) -->
-<section id="login">
+<!-- LOGIN -->
+<section id="loginSection">
   <h2>Login</h2>
   <div class="box">
-    <input id="username" placeholder="Username / Email" />
-    <input id="password" type="password" placeholder="Password" />
-    <button class="btn" onclick="login()">Login</button>
-    <p id="status"></p>
-    <p style="margin-top:10px;">Belum punya akun? <a href="#" onclick="showRegister()" style="color:#4da6ff;">Daftar di sini</a></p>
+    <input id="loginEmail" placeholder="Email">
+    <input id="loginPass" type="password" placeholder="Password">
+    <button class="btn" onclick="loginUser()">Login</button>
+    <p id="loginStatus"></p>
+    <p>Belum punya akun? <a href="#" onclick="showRegister()" style="color:#4da6ff">Daftar</a></p>
   </div>
 </section>
 
-<section id="register" style="display:none;">
+<!-- REGISTER -->
+<section id="registerSection" style="display:none">
   <h2>Daftar Akun</h2>
   <div class="box">
-    <input id="regName" placeholder="Nama Lengkap" />
-    <input id="regPhone" placeholder="Nomor HP" />
-    <input id="regEmail" placeholder="Email" />
-    <input id="regPassword" type="password" placeholder="Password" />
+    <input id="regName" placeholder="Nama Lengkap">
+    <input id="regPhone" placeholder="Nomor HP">
+    <input id="regEmail" placeholder="Email">
+    <input id="regPass" type="password" placeholder="Password">
     <button class="btn" onclick="registerUser()">Daftar</button>
-    <p style="margin-top:10px;"><a href="#" onclick="showLogin()" style="color:#4da6ff;">Kembali ke Login</a></p>
+    <p><a href="#" onclick="showLogin()" style="color:#4da6ff">Kembali ke Login</a></p>
   </div>
 </section>
 
-<!-- AREA SETELAH LOGIN -->
-<div id="afterLogin" style="display:none;">
+<!-- DASHBOARD -->
+<section id="dashboard" style="display:none">
 
-<!-- MEMBER LIVE -->
-<section id="member">
-  <h2>🔒 Live Streaming Member</h2>
-  <div class="box">
-    <iframe id="memberStream"></iframe>
-  </div>
-</section>
-
-<!-- THEATER LIVE -->
-<section id="theater">
-  <h2>🎭 Live Streaming Theater</h2>
-  <div class="box">
-    <iframe id="theaterStream"></iframe>
-  </div>
-</section>
-
-<!-- LIVE CHAT -->
-<section id="chat">
-  <h2>💬 Live Chat</h2>
-  <div class="box">
-    <iframe id="chatFrame" style="height:400px;"></iframe>
-  </div>
-</section>
-
-<!-- ADMIN -->
-<section id="admin">
-  <h2>⚙️ Admin – Ubah Live, Logo & Chat</h2>
-  <div class="box">
-    <label>Upload Logo Website</label>
-    <input type="file" accept="image/*" onchange="uploadLogo(event)" />
-
-    <label>Link Live Member (Embed)</label>
-    <input id="memberLink" />
-
-    <label>Link Live Theater (Embed)</label>
-    <input id="theaterLink" />
-
-    <label>Link Live Chat</label>
-    <input id="chatLink" />
-
-    <label>Nomor WhatsApp</label>
-    <input id="waNumber" />
-
+  <!-- ADMIN PANEL -->
+  <div id="adminPanel" class="box" style="display:none">
+    <h3>Admin Panel</h3>
+    <input id="memberLink" placeholder="Link Live Member (embed)">
+    <input id="theaterLink" placeholder="Link Live Theater (embed)">
+    <input id="chatLink" placeholder="Link Live Chat">
+    <input id="waNumber" placeholder="Nomor WhatsApp (628xxx)">
+    <input type="file" accept="image/*" onchange="uploadLogo(event)">
     <button class="btn" onclick="saveLinks()">Simpan</button>
   </div>
-</section>
 
-</div>
-
-<!-- LIVE CHAT -->
-<section id="chat">
-  <h2>💬 Live Chat</h2>
   <div class="box">
-    <iframe id="chatFrame" style="height:400px;"></iframe>
+    <h3>Live Member</h3>
+    <iframe id="memberStream"></iframe>
   </div>
-</section>
 
-<!-- ADMIN CONTROL -->
-<section id="admin">
-  <h2>⚙️ Admin – Ubah Live, Logo & Chat</h2>
   <div class="box">
-    <label>Upload Logo Website</label>
-    <input type="file" accept="image/*" onchange="uploadLogo(event)" />
-
-    <label>Link Live Member (Embed)</label>
-    <input id="memberLink" placeholder="https://www.youtube.com/embed/..." />
-
-    <label>Link Live Theater (Embed)</label>
-    <input id="theaterLink" placeholder="https://www.youtube.com/embed/..." />
-
-    <label>Link Live Chat (YouTube / Custom)</label>
-    <input id="chatLink" placeholder="https://www.youtube.com/live_chat?v=VIDEO_ID&embed_domain=domain.com" />
-
-    <label>Nomor WhatsApp (format 628xxxx)</label>
-    <input id="waNumber" placeholder="628xxxxxxxx" />
-
-    <button class="btn" onclick="saveLinks()">Simpan Semua</button>
+    <h3>Live Theater</h3>
+    <iframe id="theaterStream"></iframe>
   </div>
-</section>
 
-<footer>
-  © 2025 Wotsnite48 Live
-  <a id="waBtn" href="#" target="_blank" style="display:block;margin-top:10px;color:#25D366;">💬 Chat WhatsApp</a>
-</footer>
+  <div class="box">
+    <h3>Live Chat</h3>
+    <iframe id="chatFrame" style="height:400px"></iframe>
+  </div>
+
+  <a id="waBtn" class="wa" target="_blank">Chat WhatsApp</a>
+</section>
 
 <script>
-  function showRegister(){
-    document.getElementById('login').style.display='none';
-    document.getElementById('register').style.display='block';
-  }
+const ADMIN_EMAIL = "admin@wotsnite48.live";
+const ADMIN_PASS = "admin123";
 
-  function showLogin(){
-    document.getElementById('register').style.display='none';
-    document.getElementById('login').style.display='block';
-  }
+function getUsers(){return JSON.parse(localStorage.getItem("users")||"[]")}
+function saveUsers(u){localStorage.setItem("users",JSON.stringify(u))}
 
-  function registerUser(){
-    const data={
-      name:regName.value,
-      phone:regPhone.value,
-      email:regEmail.value,
-      password:regPassword.value
-    };
-    if(data.name && data.phone && data.email && data.password){
-      localStorage.setItem('userData', JSON.stringify(data));
-      alert('Pendaftaran berhasil, silakan login');
-      showLogin();
-    } else {
-      alert('Lengkapi semua data');
-    }
-  }
+function showRegister(){loginSection.style.display='none';registerSection.style.display='block'}
+function showLogin(){registerSection.style.display='none';loginSection.style.display='block'}
 
-  function login(){
-    const saved = JSON.parse(localStorage.getItem('userData')||'{}');
-    if((username.value===saved.email || username.value===saved.name) && password.value===saved.password){
-      localStorage.setItem('login','yes');
-      login.style.display='none';
-      register.style.display='none';
-      afterLogin.style.display='block';
-      loadAll();
-      loadLogo();
-    } else {
-      status.innerText='Login gagal';
-    }
-  }
+function registerUser(){
+  const users=getUsers();
+  users.push({name:regName.value,phone:regPhone.value,email:regEmail.value,password:regPass.value});
+  saveUsers(users);
+  alert('Pendaftaran berhasil');
+  showLogin();
+}
 
-  function saveLinks(){
-    localStorage.setItem('memberStream', memberLink.value);
-    localStorage.setItem('theaterStream', theaterLink.value);
-    localStorage.setItem('chatLink', chatLink.value);
-    localStorage.setItem('waNumber', waNumber.value);
-    loadAll();
-    alert('Berhasil disimpan');
+function loginUser(){
+  if(loginEmail.value===ADMIN_EMAIL && loginPass.value===ADMIN_PASS){
+    localStorage.setItem('role','admin');
+    enterDashboard(true);return;
   }
+  const user=getUsers().find(u=>u.email===loginEmail.value && u.password===loginPass.value);
+  if(user){localStorage.setItem('role','member');enterDashboard(false)}
+  else loginStatus.innerText='Login gagal';
+}
 
-  function loadAll(){
-    memberStream.src = localStorage.getItem('memberStream')||'';
-    theaterStream.src = localStorage.getItem('theaterStream')||'';
-    chatFrame.src = localStorage.getItem('chatLink')||'';
-    const wa = localStorage.getItem('waNumber');
-    if(wa) waBtn.href='https://wa.me/'+wa;
-  }
+function enterDashboard(isAdmin){
+  loginSection.style.display='none';
+  registerSection.style.display='none';
+  dashboard.style.display='block';
+  logoutBtn.style.display='block';
+  if(isAdmin) adminPanel.style.display='block';
+  loadAll();
+}
 
-  function uploadLogo(e){
-    const r=new FileReader();
-    r.onload=()=>{localStorage.setItem('siteLogo',r.result);loadLogo();};
-    r.readAsDataURL(e.target.files[0]);
-  }
+function logoutUser(){localStorage.removeItem('role');location.reload()}
 
-  function loadLogo(){
-    const l=localStorage.getItem('siteLogo');
-    if(l){siteLogo.src=l;siteLogo.style.display='block';}
-  }
+function saveLinks(){
+  localStorage.setItem('memberStream',memberLink.value);
+  localStorage.setItem('theaterStream',theaterLink.value);
+  localStorage.setItem('chatLink',chatLink.value);
+  localStorage.setItem('waNumber',waNumber.value);
+  loadAll();alert('Disimpan');
+}
 
-  if(localStorage.getItem('login')==='yes'){
-    document.getElementById('login').style.display='none';
-    document.getElementById('afterLogin').style.display='block';
-    loadAll();
-    loadLogo();
-  }
+function loadAll(){
+  memberStream.src=localStorage.getItem('memberStream')||'';
+  theaterStream.src=localStorage.getItem('theaterStream')||'';
+  chatFrame.src=localStorage.getItem('chatLink')||'';
+  const wa=localStorage.getItem('waNumber');if(wa) waBtn.href='https://wa.me/'+wa;
+}
+
+function uploadLogo(e){const r=new FileReader();r.onload=()=>document.querySelector('header b').style.backgroundImage=`url(${r.result})`;r.readAsDataURL(e.target.files[0])}
+
+if(localStorage.getItem('role')) enterDashboard(localStorage.getItem('role')==='admin');
 </script>
 </body>
-</html>
+      </html>
+  
